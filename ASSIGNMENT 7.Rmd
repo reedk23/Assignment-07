@@ -1,0 +1,66 @@
+---
+title: "Assignment-07"
+author: "Ke'SHondra Reed"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, error = FALSE)
+library(tidyverse)
+library(kableExtra)
+library(HelpersMG)
+library(choroplethr)
+library(choroplethrMaps)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r US_MAP, message = FALSE, echo = FALSE}
+myData2 <- read_csv("raw_data/US_MAP_DATA.csv", skip = 2)
+
+Total_death <- myData2 %>% 
+        rename(Deaths = "Total Death") %>%
+        filter(fips < 57, abbr != "US") %>%
+        summarise(region = str_to_lower(jurisdiction), value = Deaths)
+
+```
+
+```{r Step 4, message = FALSE, echo = FALSE}
+
+rateData <- myData2 %>% 
+        filter(fips < 57, abbr != "US") %>%
+        summarize(region = str_to_lower(jurisdiction), value = RatePer100000)
+
+
+```
+
+
+```{r Total_death, message = FALSE, echo = FALSE}
+
+
+state_choropleth(Total_death, title = "Total Deaths", legend = "Deaths")
+
+```
+
+### **Interpretation**
+* In this graph CA,TX,FL,NY,and IL have higher total deaths around 7,0000 to 15,0000. The next state with the highest total deaths is MI,OH,PA, and AZ. States with lower total deaths are MT,ND,WV and ME.
+
+ 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+```{r Deaths_normalized, message = FALSE, echo = FALSE}
+
+state_choropleth(rateData, title = "Total Deaths Normalized", legend = "Deaths")
+
+```
+<br/>
+<br/>
+
+* In this map the total death normalized shifted for some state. For instance in LA,MS,AL,AZ,and GA the total deaths are higher. States like TX,CA,MI, OH and IL has lower total death normalized. 
+
+
